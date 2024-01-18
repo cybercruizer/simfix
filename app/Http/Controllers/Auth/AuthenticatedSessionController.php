@@ -26,10 +26,26 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
-
-        return redirect()->intended(RouteServiceProvider::HOME);
+        if(Auth::user() && Auth::user()->role == 'admin' ) {
+            return redirect()->route('adm.dashboard');
+        }
+        else if (Auth::user() && Auth::user()->role == 'guru') {
+            return redirect()->route('guru.dashboard');
+        }
+        else if (Auth::user() && Auth::user()->role == 'walikelas') {
+            return redirect()->route('wk.dashboard');
+        }
+        else if (Auth::user() && Auth::user()->role == 'bk') {
+            return redirect()->route('bk.dashboard');
+        }
+        else if (Auth::user() && Auth::user()->role == 'keuangan') {
+            return redirect()->route('keu.dashboard');
+        }
+        else {
+            Auth::guard('web')->logout();
+            return redirect()->route('login')->with('status', 'Anda tidak diijinkan untuk masuk ke halaman ini');
+        }
     }
 
     /**
