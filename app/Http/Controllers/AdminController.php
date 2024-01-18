@@ -11,7 +11,10 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.index',['title'=>'Dashboard Admin']);
+        $menus= getMenuAdmin();
+        //dd($menus);
+        return view('admin.index',['title'=>'Dashboard Admin', 'menus'=>$menus]);
+
     }
 
     /**
