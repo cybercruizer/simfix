@@ -3,15 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\MenuService;
 
 class GuruController extends Controller
 {
+    protected $menuService;
+
+    public function __construct(MenuService $menuService)
+    {
+        $this->menuService = $menuService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('guru.index',['tittle'=>'Dashboard Guru']);
+        $menus = $this->menuService->getMenuItems('guru');
+        //print_r($menus);
+        //dd($menus);
+        return view('guru.index',['title'=>'Dashboard Guru', 'menus'=>$menus]);
     }
 
     /**

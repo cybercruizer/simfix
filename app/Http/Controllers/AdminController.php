@@ -3,15 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\MenuService;
 
 class AdminController extends Controller
 {
+    protected $menuService;
+
+    public function __construct(MenuService $menuService)
+    {
+        $this->menuService = $menuService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $menus= getMenuAdmin();
+        $menus = $this->menuService->getMenuItems('admin');
+        //print_r($menus);
         //dd($menus);
         return view('admin.index',['title'=>'Dashboard Admin', 'menus'=>$menus]);
 
