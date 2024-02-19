@@ -1,10 +1,15 @@
 <div class="sidebar-menu">
     <ul class="menu">
         <li class="sidebar-title">Menu</li>
-
-        @foreach ($menus->whereNull('parent_id') as $menu)
-            <li class="sidebar-item {{ count($menu->children) ? 'has-sub':'' }}">
-                <a href="{{ $menu->url }}" class='sidebar-link'>
+            <li class="sidebar-item {{ request()->is($prefix.'/dashboard') ? 'active' : '' }}">
+                <a href="{{ '/'.$prefix.'/'.'dashboard' }}" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+        @foreach ($menus['menus']->whereNull('parent_id') as $menu)
+            <li class="sidebar-item {{ count($menu->children) ? 'has-sub':'' }}  {{ request()->is($prefix.'/'.$menu->url) ? 'active' : '' }}">
+                <a href="{{ '/'.$prefix.'/'.$menu->url }}" class='sidebar-link'>
                     <i class="{{ $menu->icon ?? ''}}"></i>
                     <span>{{ ($menu->nama) }}</span>
                 </a>
@@ -12,14 +17,14 @@
                     <ul class="submenu ">
                         @foreach($menu->children as $child)
                             <li class="submenu-item">
-                                <a href="{{ $child->url }}" class="submenu-link">{{ $child->nama }}</a>
+                                <a href="{{ '/'.$prefix.'/'.$child->url }}" class="submenu-link">{{ $child->nama }}</a>
                             </li>
                         @endforeach
                     </ul>
                 @endif
             </li>
         @endforeach
-        <li class="sidebar-item" style="position:absolute; bottom:10px; width:80%">
+        <li class="sidebar-item my-4" style="position:relative; bottom:10px; width:90%">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button class="btn btn-block btn-danger icon icon-left" type="submit">

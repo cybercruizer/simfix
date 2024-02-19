@@ -6,9 +6,14 @@
             <div class="card">
                 <div class="card-header">
                     <h4>Pengaturan Menu</h4>
+                    @php
+                        //$role=Auth::user()->role;
+                        //$roles = ['admin','walikelas','bk','keuangan','guru'];
+
+                    @endphp
                 </div>
                 <div class="card-body">
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createMenuModal">Create Menu Item</button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createMenuModal">+ Buat menu</button>
                     {{--  <a href="{{ route('adm.menu.create') }}" class="btn btn-success">Tambah Menu Item</a> --}}
                     <ul class="nav nav-tabs my-2" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -20,90 +25,19 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#bk" role="tab" aria-controls="contact" aria-selected="false" tabindex="-1">BK</a>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#walikelas" role="tab" aria-controls="contact" aria-selected="false" tabindex="-1">Walikelas</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="contact-tab" data-bs-toggle="tab" href="#keuangan" role="tab" aria-controls="contact" aria-selected="false" tabindex="-1">Keuangan</a>
+                        </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade active show" id="admin" role="tabpanel" aria-labelledby="admin-tab">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Route</th>
-                                        <th>Icon</th>
-                                        <th>Parent ID</th>
-                                        <th>Role</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($menuItems->where('role','admin') as $menu)
-                                        <tr>
-                                            <td>{{ $menu->id }}</td>
-                                            <td>{{ $menu->parent_id ? '└─ ' : '' }}{{  $menu->nama }}</td>
-                                            <td>{{ $menu->url }}</td>
-                                            <td>{{ $menu->icon }}</td>
-                                            <td>{{ $menu->parent_id }}</td>
-                                            <td>{{ $menu->role }}</td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editMenuModal{{ $menu->id }}">Edit</button>
-                                                <form action="{{ route('adm.menu.destroy', $menu) }}" method="POST"
-                                                    style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger"
-                                                        onclick="return confirm('Yakin menghapus menu {{ $menu->nama }}')">Hapus</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="guru" role="tabpanel" aria-labelledby="guru-tab">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>URL</th>
-                                        <th>Icon</th>
-                                        <th>Parent ID</th>
-                                        <th>Role</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($menuItems->where('role','guru') as $menu)
-                                        <tr>
-                                            <td>{{ $menu->id }}</td>
-                                            <td>{{ $menu->parent_id ? '└─ ' : '' }}{{  $menu->nama }}</td>
-                                            <td>{{ $menu->url }}</td>
-                                            <td>{{ $menu->icon }}</td>
-                                            <td>{{ $menu->parent_id }}</td>
-                                            <td>{{ $menu->role }}</td>
-                                            <td>
-                                                <a href="{{ route('adm.menu.edit', $menu) }}" class="btn btn-primary">Edit</a>
-                                                <form action="{{ route('adm.menu.destroy', $menu) }}" method="POST"
-                                                    style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger"
-                                                        onclick="return confirm('Are you sure?')">Delete</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                            <p class="mt-2">Duis ultrices purus non eros fermentum hendrerit. Aenean ornare interdum
-                                viverra. Sed ut odio velit. Aenean eu diam
-                                dictum nibh rhoncus mattis quis ac risus. Vivamus eu congue ipsum. Maecenas id
-                                sollicitudin ex. Cras in ex vestibulum,
-                                posuere orci at, sollicitudin purus. Morbi mollis elementum enim, in cursus sem
-                                placerat ut.</p>
-                        </div>
+                            @include('components.menutable',['role'=>'admin'])
+                            @include('components.menutable',['role'=>'guru'])
+                            @include('components.menutable',['role'=>'bk'])
+                            @include('components.menutable',['role'=>'walikelas'])
+                            @include('components.menutable',['role'=>'keuangan'])
                     </div>
 
                 </div>
@@ -154,14 +88,8 @@
             </div>
         </div>
     </div>
+
     <!-- Edit Menu Modal -->
-    <div class="modal fade" id="editMenuModal{{ $menu->id }}" tabindex="-1" role="dialog" aria-labelledby="editMenuModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                @include('admin.menu.edit_modal')
-            </div>
-        </div>
-    </div>
     <script>
         // Clear modal form on modal close
         $('#createMenuModal').on('hidden.bs.modal', function () {

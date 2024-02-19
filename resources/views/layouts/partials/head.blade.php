@@ -1,4 +1,3 @@
-<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ $title ?? 'Sikeu' }}</title>
@@ -8,4 +7,18 @@
 <link rel="stylesheet" href="{{ asset('assets/compiled/css/app.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/compiled/css/app-dark.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/compiled/css/iconly.css') }}">
-</head>
+<link rel="stylesheet" href="{{ asset('assets/extensions/flatpickr/flatpickr.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/extensions/select2/select2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/extensions/select2/select2-bootstrap-5-theme.min.css') }}">
+<script src="{{ asset('assets/extensions/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('assets/extensions/jquery/jquery.validate.js') }}"></script>
+<script src="{{ asset('assets/extensions/datatables.net/js/jquery.dataTables.min.js') }}" ></script>
+<script src="{{ asset('assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}" ></script>
+<script src="{{ asset('assets/extensions/bootstrap-5.0.2/js/bootstrap.bundle.min.js') }}" ></script>
+<script src="{{ asset('assets/extensions/select2/select2.full.min.js') }}" ></script>
+
+<!--
+<script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap5.min.js"></script>
+-->

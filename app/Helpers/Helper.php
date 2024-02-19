@@ -1,139 +1,57 @@
 <?php
 
+use App\Models\Menu;
 use App\Services\MenuService;
 use Illuminate\Support\Collection;
 
-function getMenu()
-    {
-
-        $menus = MenuService::getMenuItems('admin');
-        //print_r($menus);
-        //dd($menus);
-        return $menus;
-
+function getMenuItems($role) {
+    switch($role) {
+        case 'admin':
+            $prefix='adm';
+            break;
+        case 'guru':
+            $prefix='guru';
+            break;
+        case 'bk':
+            $prefix='bk';
+        case 'keuangan':
+            $prefix='keu';
+            break;
+        case 'walikelas':
+            $prefix = 'wk';
+            break;
+        default:
+            $prefix=null;
     }
-
-function getMenuAdmin() {
-    $menus = new Collection([
-        [
-            'name' => 'Dashboard',
-            'url' => '/adm/dashboard',
-        ],
-        [
-            'hasSub' => true,
-            'name' => 'Master Data',
-            'url' => '#',
-            'subMenu' => [
-                [
-                    'name' => 'Data Siswa',
-                    'url' => '/adm/siswa'
-                ],
-                [
-                    'name' => 'Data Kelas',
-                    'url' => '/adm/kelas'
-                ],
-                [
-                    'name' => 'Data Tagihan',
-                    'url' => '/adm/tagihan'
-                ],
-                [
-                    'name' => 'Data Pembayaran',
-                    'url' => '/adm/pembayaran'
-                ],
-            ],
-        ],
-        [
-            'name' => 'Siswa AP',
-            'url' => '#',
-            'subMenu' => [
-                [
-                    'name' => 'Daftar AP',
-                    'url' => '/adm/ap'
-                ],
-                [
-                    'name' => 'Apply Diskon',
-                    'url' => '/adm/diskon'
-                ],
-            ],
-        ]
-    ]);
-    return $menus;
+    $data['prefix']=$prefix;
+    $data['menus']= Menu::where('role', $role)->with('children')->get();
+    return $data;
+}
+function getPrefix($role) {
+    switch($role) {
+        case 'admin':
+            $prefix='adm';
+            break;
+        case 'guru':
+            $prefix='guru';
+            break;
+        case 'bk':
+            $prefix='bk';
+        case 'keuangan':
+            $prefix='keu';
+            break;
+        case 'walikelas':
+            $prefix = 'wk';
+            break;
+        default:
+            $prefix=null;
+    }
+    return $prefix;
 }
 
-function getMenuGuru() {
-    $menus = collect([
-        [
-            'hasSub' => false,
-            'name' => 'Dashboard',
-            'url' => '/guru/dashboard',
-        ],
-        [
-            'hasSub' => true,
-            'name' => 'Data Master',
-            'url' => '#',
-            'subMenu' => [
-                [
-                    'name' => 'Data Siswa',
-                    'url' => '/guru/siswa'
-                ],
-                [
-                    'name' => 'Data Kelas',
-                    'url' => '/guru/kelas'
-                ],
-            ],
-        ]
-    ]);
-    return $menus;
-}
-
-function getMenuKeuangan() {
-    $menus = collect([
-        [
-            'hasSub' => false,
-            'name' => 'Dashboard',
-            'url' => '/keu/dashboard',
-        ],
-        [
-            'hasSub' => true,
-            'name' => 'Data Master',
-            'url' => '#',
-            'subMenu' => [
-                [
-                    'name' => 'Data Siswa',
-                    'url' => '/keu/siswa'
-                ],
-                [
-                    'name' => 'Data Kelas',
-                    'url' => '/keu/kelas'
-                ],
-            ],
-        ]
-    ]);
-    return $menus;
-}
-
-function getMenuWalikelas() {
-    $menus = collect([
-        [
-            'hasSub' => false,
-            'name' => 'Dashboard',
-            'url' => '/wk/dashboard',
-        ],
-        [
-            'hasSub' => true,
-            'name' => 'Data Master',
-            'url' => '#',
-            'subMenu' => [
-                [
-                    'name' => 'Data Siswa',
-                    'url' => '/wk/siswa'
-                ],
-                [
-                    'name' => 'Data Kelas',
-                    'url' => '/wk/kelas'
-                ],
-            ],
-        ]
-    ]);
-    return $menus;
+function getRole() {
+    $role= [
+        'admin','guru','bk','keuangan','walikelas'
+    ];
+    return $role;
 }

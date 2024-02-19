@@ -3,10 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Schema\Builder;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -42,4 +44,29 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function getRedirectRoute() {
+        return match((string)$this->role) {
+            'admin' => 'adm.dashboard',
+            'guru' => 'guru.dashboard',
+            'bk' => 'bk.dashboard',
+            'walikelas' => 'walikelas.dashboard',
+            'keuangan' => 'keu.dashboard',
+        };
+    }
+    public function scopeWalikelas($q) {
+        return $q->where('role','walikelas');
+    }
+    public function scopeBk($q) {
+        return $q->where('role','bk');
+    }
+    /**
+     * Get the classroom associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function classroom(): HasOne
+    {
+        return $this->hasOne(Classroom::class, 'walikelas_id', 'id');
+    }
+
 }

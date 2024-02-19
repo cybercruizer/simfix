@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-@include('layouts.partials.head')
+<head>
+    @include('layouts.partials.head')
+</head>
+
 
 <body>
+
     <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
     <div id="app">
-        <div id="sidebar">
+        <div id="sidebar" class="d-print-none">
             <div class="sidebar-wrapper active">
                 <div class="sidebar-header position-relative">
                     <div class="d-flex justify-content-between align-items-center">
@@ -49,18 +53,11 @@
                         </div>
                     </div>
                 </div>
-                {{--         @if (Auth::user()->role == 'admin')
-            @include('layouts.partials.sidebar-admin')
-        @elseif (Auth::user()->role == 'guru')
-            @include('layouts.partials.sidebar-keuangan')
-        @elseif (Auth::user()->role == 'guru')
-            @include('layouts.partials.sidebar-guru')
-        @elseif (Auth::user()->role == 'bk')
-            @include('layouts.partials.sidebar-bk')
-        @elseif (Auth::user()->role == 'walikelas')
-            @include('layouts.partials.sidebar-walikelas')
-        @endif  --}}
-                @include('layouts.partials.sidebar')
+                        @php
+                            $menus=getMenuItems(Auth::user()->role);
+                            //dd($menus['prefix']);
+                        @endphp
+                @include('layouts.partials.sidebar',['menus'=>$menus,'prefix'=>getPrefix(Auth::user()->role)])
             </div>
         </div>
         <div id="main">

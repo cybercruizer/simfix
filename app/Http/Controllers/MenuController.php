@@ -20,7 +20,7 @@ class MenuController extends Controller
     public function index()
     {
         $menus = $this->menuService->getMenuItems('admin');
-        $menuItems = Menu::all();
+        $menuItems = Menu::with('children')->where('parent_id',null)->get();
 
         return view('admin.menu.index', ['title'=>'Dashboard Admin', 'menus'=>$menus, 'menuItems'=>$menuItems]);
     }
@@ -80,6 +80,7 @@ class MenuController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $menu=Menu::all();
         $request->validate([
             'nama' => 'required',
             'url' => 'required',

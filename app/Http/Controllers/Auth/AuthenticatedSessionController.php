@@ -5,53 +5,48 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
      * Display the login view.
+     *
+     * @return \Inertia\Response
      */
-    public function create(): View
+    public function create()
     {
-        return view('auth.login');
+        return Inertia::render('Auth/Login', [
+            'canResetPassword' => Route::has('password.request'),
+            'status' => session('status'),
+        ]);
     }
 
     /**
      * Handle an incoming authentication request.
+     *
+     * @param  \App\Http\Requests\Auth\LoginRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request)
     {
         $request->authenticate();
+
         $request->session()->regenerate();
-        if(Auth::user() && Auth::user()->role == 'admin' ) {
-            return redirect()->route('adm.dashboard');
-        }
-        else if (Auth::user() && Auth::user()->role == 'guru') {
-            return redirect()->route('guru.dashboard');
-        }
-        else if (Auth::user() && Auth::user()->role == 'walikelas') {
-            return redirect()->route('wk.dashboard');
-        }
-        else if (Auth::user() && Auth::user()->role == 'bk') {
-            return redirect()->route('bk.dashboard');
-        }
-        else if (Auth::user() && Auth::user()->role == 'keuangan') {
-            return redirect()->route('keu.dashboard');
-        }
-        else {
-            Auth::guard('web')->logout();
-            return redirect()->route('login')->with('status', 'Anda tidak diijinkan untuk masuk ke halaman ini');
-        }
+
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**
      * Destroy an authenticated session.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request)
     {
         Auth::guard('web')->logout();
 
