@@ -1,1 +1,2 @@
-#Aplikasi sideload dari sistem keuangan
+##Tentang
+aplikasi sideload untuk aplikasi istem keuangan dan sistem informasi smk muh mungkid
