@@ -1,7 +1,20 @@
-import './bootstrap';
+require('./bootstrap');
 
-import Alpine from 'alpinejs';
+// Import modules...
+import { createApp, h } from 'vue';
+import { createInertiaApp } from '@inertiajs/inertia-vue3';
+import { InertiaProgress } from '@inertiajs/progress';
 
-window.Alpine = Alpine;
+const el = document.getElementById('app');
 
-Alpine.start();
+createInertiaApp({
+    resolve: (name) => require(`./Pages/${name}`),
+    setup({ el, app, props, plugin }) {
+        createApp({ render: () => h(app, props) })
+            .mixin({ methods: { route } })
+            .use(plugin)
+            .mount(el);
+    },
+});
+
+InertiaProgress.init({ color: '#4B5563' });
